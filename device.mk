@@ -55,7 +55,7 @@ PRODUCT_PACKAGES += diting_legacy_framework_compatibility_matrix.6.xml
 # Optional source features.
 ifeq ($(DITING_ISLAND),true)
 PRODUCT_PACKAGE_OVERLAYS += device/xiaomi/diting/overlay-uwu-island
-PRODUCT_SYSTEM_EXT_PROPERTIES += ro.uwu.feature.island=true ro.mi.os.version.code?=2
+PRODUCT_SYSTEM_EXT_PROPERTIES += ro.uwu.feature.island=true persist.sys.feature.island=true ro.mi.os.version.code?=2
 endif
 ifeq ($(DITING_ROM_UPDATER),true)
 PRODUCT_PACKAGES += uwuUpdater
