@@ -1,0 +1,35 @@
+# SPDX-FileCopyrightText: 2026 The uwuAOSP Project
+# SPDX-License-Identifier: Apache-2.0
+type uwu_updater, domain;
+typeattribute uwu_updater coredomain;
+app_domain(uwu_updater)
+net_domain(uwu_updater)
+
+# app_domain assigns app attributes, not service discovery permissions.
+# Framework startup and notification/power/package app APIs need explicit find.
+allow uwu_updater app_api_service:service_manager find;
+
+# Only this platform-signed package can bind update_engine and pass its OTA FD.
+allow uwu_updater update_engine_service:service_manager find;
+binder_call(uwu_updater, update_engine)
+binder_call(update_engine, uwu_updater)
+allow update_engine uwu_updater:fd use;
+allow update_engine uwu_updater_payload_file:file r_file_perms;
+allow uwu_updater uwu_updater_data_file:dir create_dir_perms;
+allow uwu_updater uwu_updater_data_file:{ file lnk_file } create_file_perms;
+# Unnamed files stay app data. The filename rule still wins for payload.zip.
+type_transition uwu_updater uwu_updater_data_file:file uwu_updater_data_file;
+type_transition uwu_updater uwu_updater_data_file:file uwu_updater_payload_file "payload.zip";
+allow uwu_updater uwu_updater_payload_file:file create_file_perms;
+allow installd uwu_updater_payload_file:file { create_file_perms relabelfrom relabelto };
+
+# SystemProperties used for build identity and device validation are exported
+# read-only build properties. No writable properties or block-device access.
+get_prop(uwu_updater, build_prop)
+get_prop(uwu_updater, exported_default_prop)
+get_prop(uwu_updater, uwu_ota_base_url_prop)
+
+# A user-picked OTA ZIP is read through the documents provider and copied into
+# the staged payload. The content service is an app_api_service, and provider
+# Binder/FD access comes from the platform appdomain rules; no extra grant is needed.
+# The updater never receives shared-storage write or block-device access.

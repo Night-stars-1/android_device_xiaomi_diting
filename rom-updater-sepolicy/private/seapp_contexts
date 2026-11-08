@@ -1,0 +1,3 @@
+# SPDX-FileCopyrightText: 2026 The uwuAOSP Project
+# SPDX-License-Identifier: Apache-2.0
+user=_app seinfo=platform name=org.uwuaosp.updater isPrivApp=true domain=uwu_updater type=uwu_updater_data_file levelFrom=user

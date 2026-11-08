@@ -1,0 +1,3 @@
+# Device-owned wrapper; the unchanged common file keeps USB, touch and ADSP.
+import /init.recovery.qcom-base.rc
+import /init.recovery.diting-crypto.rc

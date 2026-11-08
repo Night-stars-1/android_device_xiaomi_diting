@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Apache-2.0
+# Only the precise torch-current attribute is writable by cameraserver.
+type vendor_sysfs_diting_torch_brightness, fs_type, sysfs_type;
+type vendor_sysfs_diting_torch_status, fs_type, sysfs_type;
+
+allow cameraserver sysfs:dir search;
+allow cameraserver sysfs:lnk_file read;
+allow cameraserver sysfs_leds:dir search;
+allow cameraserver vendor_sysfs_diting_torch_brightness:file { getattr open read write };
+allow cameraserver vendor_sysfs_diting_torch_status:file { getattr open read };
+
+# Preserve read access for the existing vendor camera provider. Kernel LED
+# triggers, not a new writable sysfs grant, continue to control photo flash.
+allow hal_camera_default vendor_sysfs_diting_torch_brightness:file { getattr open read };
+allow hal_camera_default vendor_sysfs_diting_torch_status:file { getattr open read };

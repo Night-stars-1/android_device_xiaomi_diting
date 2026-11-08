@@ -1,0 +1,3 @@
+# Independent unlock-only fstab. Never use mount_all/fsck/format on this file.
+/dev/block/bootdevice/by-name/metadata /metadata ext4 noatime,nosuid,nodev wait
+/dev/block/bootdevice/by-name/userdata /data f2fs noatime,nosuid,nodev,reserve_root=32768,resgid=1065,fsync_mode=nobarrier,inlinecrypt wait,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption,metadata_encryption=aes-256-xts:wrappedkey_v0

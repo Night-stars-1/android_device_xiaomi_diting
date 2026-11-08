@@ -1,0 +1,13 @@
+package {
+    default_applicable_licenses: ["Android-Apache-2.0"],
+}
+
+// Explicitly invoked diagnostics only: no init service and no decrypt operations.
+cc_binary {
+    name: "diting_recovery_crypto_probe",
+    recovery: true,
+    srcs: ["probe.cpp"],
+    cflags: ["-Wall", "-Wextra", "-Werror"],
+    static_libs: ["libfstab", "libdm", "libext2_uuid"],
+    shared_libs: ["libbase", "libbinder_ndk", "liblog", "libselinux"],
+}

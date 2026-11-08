@@ -1,0 +1,67 @@
+// SPDX-License-Identifier: Apache-2.0
+soong_namespace {
+    imports: ["device/qcom/recovery-crypto-common", "vendor/xiaomi/sm8450-common"],
+}
+
+soong_config_module_type {
+    name: "diting_crypto_cc_defaults_type",
+    module_type: "cc_defaults",
+    config_namespace: "recovery_crypto",
+    bool_variables: ["android17"],
+    properties: ["enabled", "shared_libs"],
+}
+diting_crypto_cc_defaults_type {
+    name: "diting_crypto_bridge_defaults",
+    enabled: false,
+    soong_config_variables: {
+        android17: {
+            enabled: true,
+            shared_libs: [
+                "diting_rec_libqtikeymaster4", "libhidlbase", "libutils", "liblog",
+                "libbinder_ndk", "libbase", "android.hardware.gatekeeper-V1-ndk",
+                "android.hardware.gatekeeper@1.0",
+                "android.hardware.security.sharedsecret-V1-ndk",
+                "android.hardware.security.keymint-V5-ndk",
+                "android.hardware.keymaster@4.0", "android.hardware.keymaster@4.1",
+            ],
+        },
+    },
+}
+cc_binary {
+    name: "diting_rec_auth_service",
+    defaults: ["diting_crypto_bridge_defaults", "qcom_recovery_crypto_auth_sources"],
+    stem: "diting-recovery-auth",
+    recovery: true,
+    compile_multilib: "64",
+}
+
+prebuilt_etc {
+    name: "diting_rec_crypto_config",
+    recovery: true,
+    src: "recovery.crypto.conf",
+    filename: "recovery.crypto.conf",
+}
+prebuilt_etc {
+    name: "diting_rec_crypto_fstab",
+    recovery: true,
+    src: "recovery.crypto.fstab",
+    filename: "recovery.crypto.fstab",
+}
+// VintfObjectRecovery merges device/framework fragments under /system/etc.
+// Use a distinct fragment: preserve existing health/fastboot manifests.
+prebuilt_etc {
+    name: "diting_rec_crypto_manifest",
+    recovery: true,
+    src: "manifest.xml",
+    relative_install_path: "vintf/manifest",
+    filename: "diting-recovery-crypto.xml",
+}
+// Init scans /system/etc/init automatically. Do not compete with the inherited
+// common.mk owner of /init.recovery.qcom.rc: product inheritance may win there.
+prebuilt_etc {
+    name: "diting_rec_crypto_init",
+    recovery: true,
+    src: "init.recovery.diting-crypto.rc",
+    relative_install_path: "init",
+    filename: "init.recovery.diting-crypto.rc",
+}

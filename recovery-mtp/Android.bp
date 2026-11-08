@@ -1,0 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+soong_namespace {}
+prebuilt_etc {
+    name: "diting_rec_mtp_config",
+    recovery: true,
+    src: "recovery.mtp.conf",
+    filename: "recovery.mtp.conf",
+}

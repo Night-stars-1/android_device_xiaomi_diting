@@ -1,0 +1,52 @@
+# These services exist only in the opt-in Recovery ramdisk.
+on init
+    setprop vendor.gatekeeper.disable_spu true
+    mkdir /metadata 0700 root root
+
+on post-fs
+    # The common fs action mounts the active-slot modem firmware read-only.
+    # The mount point is pre-created in the ramdisk by PRODUCT_COPY_FILES.
+    # Do not create or relabel vendor-file directories during Recovery boot.
+    mount none /firmware /vendor/firmware_mnt ro bind
+    # Secure filesystem listener may read existing persist data, never repair it.
+    mkdir /mnt/vendor 0755 root root
+    mkdir /mnt/vendor/persist 0755 root root
+    mount ext4 /dev/block/bootdevice/by-name/persist /mnt/vendor/persist ro nosuid nodev noatime noload
+    symlink /mnt/vendor/persist /persist
+    # Ramdisk ELFs retain rootfs labels. Explicit service contexts follow the
+    # existing Recovery health service pattern; do not relabel immutable ELFs.
+    start diting-recovery-qseecomd
+    start diting-recovery-keymint
+    start diting-recovery-auth
+
+on property:init.svc.fastbootd=running
+    stop diting-recovery-keymint
+    stop diting-recovery-auth
+    stop diting-recovery-qseecomd
+    umount /vendor/firmware_mnt
+    umount /mnt/vendor/persist
+
+service diting-recovery-qseecomd /system/bin/diting-recovery-qseecomd
+    class hal
+    seclabel u:r:tee:s0
+    user root
+    group root drmrpc
+    socket notify-topology stream 0660 system drmrpc
+    disabled
+    oneshot
+
+service diting-recovery-keymint /system/bin/diting-recovery-keymint
+    class hal
+    seclabel u:r:vendor_hal_keymint_qti:s0
+    user system
+    group system drmrpc
+    disabled
+    oneshot
+
+service diting-recovery-auth /system/bin/diting-recovery-auth
+    class hal
+    seclabel u:r:vendor_hal_gatekeeper_qti:s0
+    user system
+    group system drmrpc
+    disabled
+    oneshot

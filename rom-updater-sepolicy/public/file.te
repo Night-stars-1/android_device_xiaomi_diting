@@ -1,0 +1,6 @@
+# SPDX-FileCopyrightText: 2026 The uwuAOSP Project
+# SPDX-License-Identifier: Apache-2.0
+type uwu_updater_data_file, file_type, data_file_type, core_data_file_type, app_data_file_type;
+# Only the staged OTA payload bypasses app-data MLS for update_engine's passed FD.
+# App preferences and other private data retain normal per-user MLS isolation.
+type uwu_updater_payload_file, file_type, data_file_type, core_data_file_type, mlstrustedobject;

@@ -1,0 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+// diting launched at FCM 6 and retains its Android 12 / 5.10 kernel.
+vintf_compatibility_matrix {
+    name: "diting_legacy_framework_compatibility_matrix.6.xml",
+    stem: "compatibility_matrix.6.xml",
+    srcs: ["compatibility_matrix.6.xml"],
+    kernel_configs: ["kernel_config_s_5.10"],
+}

@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: Apache-2.0
+cc_library_static {
+    name: "libcameraservice_diting_torch",
+    srcs: ["CameraProviderExtension.cpp"],
+    include_dirs: ["frameworks/av/services/camera/libcameraservice"],
+    shared_libs: ["liblog"],
+    cpp_std: "c++17",
+    cflags: ["-Wall", "-Wextra", "-Werror"],
+}

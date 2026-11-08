@@ -7,10 +7,13 @@
 # Inherit from diting device
 $(call inherit-product, device/xiaomi/diting/device.mk)
 
-# Inherit from common lineage configuration
-$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+# Inherit from common uwuAOSP configuration
+UWU_DEVICE_TYPE := phone
+UWU_SUPPORTS_TELEPHONY := true
+UWU_MAINTAINER := Night-stars-1
+$(call inherit-product, vendor/uwu/config/common.mk)
 
-PRODUCT_NAME := lineage_diting
+PRODUCT_NAME := uwu_diting
 PRODUCT_DEVICE := diting
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_BRAND := Xiaomi

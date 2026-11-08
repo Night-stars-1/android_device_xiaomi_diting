@@ -1,0 +1,4 @@
+# SPDX-FileCopyrightText: 2026 The uwuAOSP Project
+# SPDX-License-Identifier: Apache-2.0
+/data/user/[0-9]+/org\.uwuaosp\.updater/files/payload\.zip u:object_r:uwu_updater_payload_file:s0
+/data/data/org\.uwuaosp\.updater/files/payload\.zip u:object_r:uwu_updater_payload_file:s0
