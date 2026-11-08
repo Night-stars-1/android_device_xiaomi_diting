@@ -30,7 +30,8 @@ TARGET_SCREEN_DENSITY := 480
 
 # Feature flags are shared by device Soong modules and policy.
 SOONG_CONFIG_NAMESPACES += diting
-SOONG_CONFIG_diting += island rom_updater torch_strength recovery_crypto recovery_mtp recovery_crypto_probe
+SOONG_CONFIG_diting += island rom_updater torch_strength recovery_crypto recovery_mtp recovery_crypto_probe soong_only
+SOONG_CONFIG_diting_soong_only := $(if $(filter true,$(UWU_SOONG_ONLY_BUILD)),true,false)
 SOONG_CONFIG_diting_island := $(DITING_ISLAND)
 SOONG_CONFIG_diting_rom_updater := $(DITING_ROM_UPDATER)
 SOONG_CONFIG_diting_torch_strength := $(DITING_TORCH_STRENGTH)
