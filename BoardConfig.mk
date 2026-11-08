@@ -40,7 +40,6 @@ SOONG_CONFIG_diting_recovery_mtp := $(DITING_RECOVERY_MTP)
 SOONG_CONFIG_diting_recovery_crypto_probe := $(DITING_RECOVERY_CRYPTO_PROBE)
 ifeq ($(DITING_ROM_UPDATER),true)
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += device/xiaomi/diting/rom-updater-sepolicy/private
-SYSTEM_EXT_PUBLIC_SEPOLICY_DIRS += device/xiaomi/diting/rom-updater-sepolicy/public
 endif
 ifeq ($(DITING_RECOVERY_CRYPTO),true)
 include device/xiaomi/diting/recovery-crypto/BoardConfig.mk
