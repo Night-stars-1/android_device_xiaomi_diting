@@ -17,13 +17,9 @@ $(error DITING_RECOVERY_MTP requires DITING_RECOVERY_CRYPTO=true)
 endif
 endif
 ifeq ($(DITING_ROM_UPDATER),true)
-ifeq ($(filter https://%,$(DITING_OTA_BASE_URL)),)
-$(error DITING_ROM_UPDATER requires an explicit HTTPS DITING_OTA_BASE_URL)
-endif
-ifeq ($(patsubst https://%,%,$(DITING_OTA_BASE_URL)),)
-$(error DITING_OTA_BASE_URL must contain a host)
-endif
-ifneq ($(words $(DITING_OTA_BASE_URL)),1)
-$(error DITING_OTA_BASE_URL must be a single HTTPS URL)
+# Escape quotes before passing the generated literal through the shell.
+_diting_url_valid := $(shell python3 device/xiaomi/diting/config/validate_ota_url.py '$(subst ','"'"',$(DITING_OTA_BASE_URL))' && echo true)
+ifneq ($(_diting_url_valid),true)
+$(error DITING_ROM_UPDATER requires a valid literal HTTPS DITING_OTA_BASE_URL)
 endif
 endif
