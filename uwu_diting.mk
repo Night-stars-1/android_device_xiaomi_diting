@@ -11,6 +11,8 @@ $(call inherit-product, device/xiaomi/diting/device.mk)
 UWU_DEVICE_TYPE := phone
 UWU_SUPPORTS_TELEPHONY := true
 UWU_MAINTAINER := Night-stars-1
+# Optional uwuUpdater (DITING_ROM_UPDATER) uses the same package as the stock Updater.
+UWU_INCLUDE_UPDATER := false
 $(call inherit-product, vendor/uwu/config/common.mk)
 
 PRODUCT_NAME := uwu_diting
