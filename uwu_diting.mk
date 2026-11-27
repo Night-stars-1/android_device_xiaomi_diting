@@ -15,6 +15,11 @@ UWU_MAINTAINER := Night-stars-1
 UWU_INCLUDE_UPDATER := false
 $(call inherit-product, vendor/uwu/config/common.mk)
 
+# MiPush runtime and its same-signer setup and management app.
+PRODUCT_PACKAGES += \
+    DitingMiPushXmsf \
+    DitingMiPushManager
+
 PRODUCT_NAME := uwu_diting
 PRODUCT_DEVICE := diting
 PRODUCT_MANUFACTURER := Xiaomi

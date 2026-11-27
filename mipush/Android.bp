@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: Apache-2.0
+
+package {
+    default_applicable_licenses: ["diting_mipush_license"],
+}
+
+license {
+    name: "diting_mipush_license",
+    license_kinds: ["SPDX-license-identifier-GPL-3.0"],
+    license_text: ["LICENSE"],
+}
+
+android_app_import {
+    name: "DitingMiPushXmsf",
+    apk: "DitingMiPushXmsf.apk",
+    product_specific: true,
+    preprocessed: true,
+}
+
+android_app_import {
+    name: "DitingMiPushManager",
+    apk: "DitingMiPushManager.apk",
+    product_specific: true,
+    preprocessed: true,
+}

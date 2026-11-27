@@ -1,0 +1,84 @@
+diff --git a/mipush/build.gradle.kts b/mipush/build.gradle.kts
+index d2bd23e..9d37730 100644
+--- a/mipush/build.gradle.kts
++++ b/mipush/build.gradle.kts
+@@ -48,6 +48,12 @@ android {
+         }
+     }
+ 
++    packaging {
++        jniLibs {
++            useLegacyPackaging = false
++        }
++    }
++
+     buildFeatures {
+         buildConfig = true
+         compose = true
+diff --git a/xmsf/build.gradle.kts b/xmsf/build.gradle.kts
+index 65e3cf9..1d2393a 100644
+--- a/xmsf/build.gradle.kts
++++ b/xmsf/build.gradle.kts
+@@ -44,7 +44,7 @@ android {
+ 
+     packaging {
+         jniLibs {
+-            useLegacyPackaging = true
++            useLegacyPackaging = false
+         }
+     }
+ }
+diff --git a/xmsf/notification/src/main/java/io/github/magisk317/mipush/notification/FocusSemanticTranslator.kt b/xmsf/notification/src/main/java/io/github/magisk317/mipush/notification/FocusSemanticTranslator.kt
+index 7b826c1..c4d5958 100644
+--- a/xmsf/notification/src/main/java/io/github/magisk317/mipush/notification/FocusSemanticTranslator.kt
++++ b/xmsf/notification/src/main/java/io/github/magisk317/mipush/notification/FocusSemanticTranslator.kt
+@@ -2,12 +2,16 @@ package io.github.magisk317.mipush.notification
+ 
+ import android.content.Context
+ import android.os.Build
++import android.provider.Settings
+ import com.xiaomi.channel.commonutils.android.MIUIUtils
+ import com.xiaomi.xmpush.thrift.PushMetaInfo
+ import io.github.magisk317.mipush.notification.policy.NotificationStyle
+ 
+ /** Android/protocol facade for the platform-neutral focus semantic planner. */
+ object FocusSemanticTranslator {
++    private const val FOCUS_PROTOCOL_SETTING = "notification_focus_protocol"
++    private const val NATIVE_FOCUS_PROTOCOL = 3
++
+     data class Capabilities(
+         val supportsMiuiFocusExtras: Boolean,
+         val supportsNativeLiveUpdates: Boolean,
+@@ -89,13 +93,25 @@ object FocusSemanticTranslator {
+         generatedFocusParam: String?,
+         generatedFocusCandidate: Boolean,
+         capabilities: Capabilities = Capabilities.current(),
+-    ): Plan = plan(
+-        detected = LiveUpdateDetector.detect(context, metaInfo, packageName),
+-        configuredFocusParam = configuredFocusParam,
+-        generatedFocusParam = generatedFocusParam,
+-        generatedFocusCandidate = generatedFocusCandidate,
+-        capabilities = capabilities,
+-    )
++    ): Plan {
++        val plan = plan(
++            detected = LiveUpdateDetector.detect(context, metaInfo, packageName),
++            configuredFocusParam = configuredFocusParam,
++            generatedFocusParam = generatedFocusParam,
++            generatedFocusCandidate = generatedFocusCandidate,
++            capabilities = capabilities,
++        )
++        if (plan.attachMiuiFocusExtras || configuredFocusParam.isNullOrBlank() ||
++            Settings.System.getInt(context.contentResolver, FOCUS_PROTOCOL_SETTING, 0) != NATIVE_FOCUS_PROTOCOL
++        ) return plan
++
++        // A native renderer can consume explicit focus extras without MIUI's proxy behavior.
++        return plan.copy(
++            nativeDetection = null,
++            attachMiuiFocusExtras = true,
++            reason = "native_focus_extras",
++        )
++    }
+ 
+     fun plan(
+         detected: LiveUpdateDetector.DetectionResult?,
