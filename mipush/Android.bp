@@ -10,11 +10,17 @@ license {
     license_text: ["LICENSE"],
 }
 
+// Both APKs list androidx.window.extensions and androidx.window.sidecar as optional
+// <uses-library> tags; the build must declare the same set for the dexpreopt check.
 android_app_import {
     name: "DitingMiPushXmsf",
     apk: "DitingMiPushXmsf.apk",
     product_specific: true,
     preprocessed: true,
+    optional_uses_libs: [
+        "androidx.window.extensions",
+        "androidx.window.sidecar",
+    ],
 }
 
 android_app_import {
@@ -22,4 +28,8 @@ android_app_import {
     apk: "DitingMiPushManager.apk",
     product_specific: true,
     preprocessed: true,
+    optional_uses_libs: [
+        "androidx.window.extensions",
+        "androidx.window.sidecar",
+    ],
 }
